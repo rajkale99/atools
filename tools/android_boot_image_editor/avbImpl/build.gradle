@@ -1,0 +1,49 @@
+apply plugin: "c"
+apply plugin: "cpp"
+apply plugin: "cpp-unit-test"
+
+model {
+    buildTypes {
+        release
+    }
+
+    components {
+        avbx(NativeLibrarySpec) {
+            sources {
+                cpp {
+                    lib project: ":aosp:libavb1.2", library: "avb"
+                }
+            }
+            binaries.all {
+                cCompiler.args << "-Wall" << "-g"
+                cppCompiler.args << "-std=c++17"
+            }
+        }
+
+        avbVerifier(NativeExecutableSpec) {
+            sources {
+                cpp {
+                    lib project: ":aosp:libavb1.2", library: "avb", linkage: "static"
+                    lib project: ":avbImpl", library: "avbx", linkage: "static"
+                }
+            }
+            binaries.all {
+                cppCompiler.define "XXX"
+                cppCompiler.args << '-std=c++17'
+            }
+        }
+    }
+}
+
+task v1(type:Exec) {
+    workingDir "."
+    environment preloads: "vbmeta boot", requests: "boot dtbo vendor_boot", suffix: ""
+    commandLine "./build/exe/avbVerifier/avbVerifier"
+}
+
+task v2(type:Exec) {
+    description "verify non-AB recovery mode"
+    workingDir "."
+    environment preloads: "", requests: "recovery", suffix: ""
+    commandLine "./build/exe/avbVerifier/avbVerifier"
+}

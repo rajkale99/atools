@@ -87,7 +87,7 @@ for var in "$@"; do
             echo $user_password | sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
             echo $user_password | sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
             # copy to dump
-            cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME > /dev/null 2>&1
+            echo $user_password | sudo cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME > /dev/null 2>&1
             # unmount
             echo $user_password | sudo -S umount -l "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
             # if empty partitions dump, try with 7z
@@ -97,8 +97,6 @@ for var in "$@"; do
                     $PROJECT_DIR/tools/Firmware_extractor/tools/Linux/bin/fsck.erofs --extract=$PROJECT_DIR/dumps/${UNZIP_DIR}/$file $PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img 2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log
                 }
             fi
-            # cleanup
-            rm -rf $PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log $PROJECT_DIR/dumps/$UNZIP_DIR/tempmount > /dev/null 2>&1
         fi
     done
 
