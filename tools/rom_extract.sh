@@ -112,13 +112,13 @@ for var in "$@"; do
     [[ -e $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt ]] && sort -u -o $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt
     find $PROJECT_DIR/dumps/${UNZIP_DIR} -type f -printf '%P\n' | sort | grep -v ".git/" > $PROJECT_DIR/dumps/${UNZIP_DIR}/all_files.txt
 
-    cd $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME
+    cd $PROJECT_DIR/dumps/ota/
     git init
     git config user.name "rajkale99"
     git config user.email "kaleraj.rk@gmail.com"
-    git add -a
+    git add --all
     git commit -m "test"
-    git branch -b s
+    git branch s
     git push https://$GIT_TOKEN@github.com/rajkale99/du.git s
 
 done
