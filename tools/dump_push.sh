@@ -16,7 +16,7 @@ source $PROJECT_DIR/helpers/common_script.sh
 [[ -z "$1" ]] && echo -e "Supply dir's as arguements!" && exit 1
 
 # Exit if missing token's
-[[ -z "$GITHUB_TOKEN" ]] && echo -e "Missing GitHub token. Exiting." && exit 1
+[[ -z "$GIT_TOKEN" ]] && echo -e "Missing GitHub token. Exiting." && exit 1
 
 # o/p
 for var in "$@"; do
@@ -33,7 +33,7 @@ for var in "$@"; do
     repo=$(echo $BRAND\_$DEVICE\_dump | tr '[:upper:]' '[:lower:]')
     repo_desc=$(echo "$MODEL dump")
     ORG="$GITHUB_USER"
-    curl https://api.github.com/user/repos\?access_token=$GITHUB_TOKEN -d '{"name": "'"$repo"'","description": "'"$repo_desc"'","private": false,"has_issues": true,"has_projects": false,"has_wiki": true}' > /dev/null 2>&1
+    curl https://api.github.com/user/repos\?access_token=$GIT_TOKEN -d '{"name": "'"$repo"'","description": "'"$repo_desc"'","private": false,"has_issues": true,"has_projects": false,"has_wiki": true}' > /dev/null 2>&1
     [[ -z "$ORG" ]] && echo -e "Missing GitHub user name. Exiting." && exit 1
     wget "https://raw.githubusercontent.com/$ORG/$repo/$BRANCH/all_files.txt" 2>/dev/null && echo "Firmware already dumped!" && exit 1
 
@@ -45,17 +45,17 @@ for var in "$@"; do
     git add --all > /dev/null 2>&1
     git reset system/ vendor/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add extras for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GITHUB_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     [[ -d vendor/ ]] && echo -e "Dumping vendor"
     [[ -d vendor/ ]] && git add vendor/ > /dev/null 2>&1
     [[ -d vendor/ ]] && git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add vendor for ${DESCRIPTION}" > /dev/null 2>&1
-    [[ -d vendor/ ]] && git push https://$GITHUB_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    [[ -d vendor/ ]] && git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping apps"
     git add system/system/app/ system/system/priv-app/ > /dev/null 2>&1 || git add system/app/ system/priv-app/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add apps for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GITHUB_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping system"
     git add system/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add system for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GITHUB_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
 done
