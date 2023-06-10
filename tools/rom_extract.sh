@@ -112,13 +112,9 @@ for var in "$@"; do
     [[ -e $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt ]] && sort -u -o $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt
     find $PROJECT_DIR/dumps/${UNZIP_DIR} -type f -printf '%P\n' | sort | grep -v ".git/" > $PROJECT_DIR/dumps/${UNZIP_DIR}/all_files.txt
 
-    cd $PROJECT_DIR/dumps/ota/
-    git init
-    git config user.name "rajkale99"
-    git config user.email "kaleraj.rk@gmail.com"
-    git add --all
-    git commit -asm "test"
-    git remote add origin https://[GIT_TOKEN]@github.com/rajkale99/du
-    git push --set-upstream origin master
+    duration=$SECONDS
+    [[ "$VERBOSE" != "n" ]] && echo -e "Dump location: $PROJECT_DIR/dumps/$UNZIP_DIR/"
+    [[ "$VERBOSE" != "n" ]] && echo -e "Extract time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
+    [[ "$DUMPPUSH" == "y" ]] && bash "$PROJECT_DIR/tools/dump_push.sh" "$PROJECT_DIR/dumps/$UNZIP_DIR/"
 
 done
