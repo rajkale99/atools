@@ -146,7 +146,7 @@ for var in "$@"; do
         DATE=$( cat "$CAT_FILE" | grep "ro.bootimage.build.date=" | sed "s|.*=||g" | head -n 1 )
     fi
 
-    BRANCH=s
+    BRANCH=$(echo $DESCRIPTION $DATE | tr ' ' '-' | tr ':' '-')
     TOPIC1=$(echo $BRAND | tr '[:upper:]' '[:lower:]' | tr -dc '[[:print:]]' | tr '_' '-' | cut -c 1-35)
     TOPIC2=$(echo $PLATFORM | tr '[:upper:]' '[:lower:]' | tr -dc '[[:print:]]' | tr '_' '-' | cut -c 1-35)
     TOPIC3=$(echo $DEVICE | tr '[:upper:]' '[:lower:]' | tr -dc '[[:print:]]' | tr '_' '-' | cut -c 1-35)
