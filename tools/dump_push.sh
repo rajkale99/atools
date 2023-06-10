@@ -54,5 +54,5 @@ for var in "$@"; do
     echo -e "Dumping system"
     git add system/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add system for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH
 done
