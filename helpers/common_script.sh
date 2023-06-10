@@ -18,8 +18,8 @@ if [ "$1" == "y" ]; then
 fi
 
 # set common var's
-GITHUB_EMAIL="$(git config --get user.email)"
-GITHUB_USER="$(git config --get user.name)"
+GITHUB_EMAIL="kaleraj.rk@gmail.com"
+GITHUB_USER="rajkale99"
 [[ -z "$DUMMYDT" ]] && DUMMYDT="n"
 [[ -z "$DUMPPUSH" ]] && DUMPPUSH="n"
 [[ -z "$ORGMEMBER" ]] && ORGMEMBER="n"
