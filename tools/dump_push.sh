@@ -34,8 +34,6 @@ for var in "$@"; do
     repo_desc=dump
     ORG="rajkale99"
     curl https://api.github.com/user/repos\?access_token=$GIT_TOKEN -d '{"name": "'"$repo"'","description": "'"$repo_desc"'","private": false,"has_issues": true,"has_projects": false,"has_wiki": true}' > /dev/null 2>&1
-    [[ -z "$ORG" ]] && echo -e "Missing GitHub user name. Exiting." && exit 1
-    wget "https://raw.githubusercontent.com/$ORG/$repo/$BRANCH/all_files.txt" 2>/dev/null && echo "Firmware already dumped!" && exit 1
 
     git init > /dev/null 2>&1
     git checkout -b $BRANCH > /dev/null 2>&1
