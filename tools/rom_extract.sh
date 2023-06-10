@@ -121,4 +121,4 @@ for var in "$@"; do
     git remote add origin https://[GIT_TOKEN]@github.com/rajkale99/du
     git push
 
-   done
+done
