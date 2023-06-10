@@ -37,7 +37,6 @@ for var in "$@"; do
 
     git init > /dev/null 2>&1
     git checkout -b $BRANCH > /dev/null 2>&1
-    find -size +97M -printf '%P\n' -o -name *sensetime* -printf '%P\n' -o -name *.lic -printf '%P\n' > .gitignore
     git remote add origin https://github.com/$ORG/${repo,,}.git > /dev/null 2>&1
     echo -e "Dumping extras"
     git add --all > /dev/null 2>&1
