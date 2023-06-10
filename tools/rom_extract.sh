@@ -119,6 +119,6 @@ for var in "$@"; do
     git add --all
     git commit -asm "test"
     git remote add origin https://[GIT_TOKEN]@github.com/rajkale99/du
-    git push
+    git push --set-upstream origin master
 
 done
