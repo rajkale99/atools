@@ -118,8 +118,9 @@ for var in "$@"; do
     git config user.email "kaleraj.rk@gmail.com"
     git add --all
     git commit -m "test"
-    git branch s
-    git push https://$GIT_TOKEN@github.com/rajkale99/du.git s
+    git remote remove origin
+    git remote add origin https://[GIT_TOKEN]@github.com/rajkale99/du
+    git push
 
 done
    done
