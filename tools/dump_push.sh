@@ -35,6 +35,7 @@ for var in "$@"; do
     ORG="rajkale99"
     
     git init > /dev/null 2>&1
+    git config --global http.postBuffer 524288000 /dev/null 2>&1
     git checkout -b $BRANCH > /dev/null 2>&1
     git remote add origin https://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git > /dev/null 2>&1
     echo -e "Dumping extras"
