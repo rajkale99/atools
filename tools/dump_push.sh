@@ -35,12 +35,12 @@ for var in "$@"; do
     ORG="rajkale99"
     
     git init > /dev/null 2>&1
-    git config --global http.postBuffer 524288000 /dev/null 2>&1
     git checkout -b $BRANCH > /dev/null 2>&1
     find -size +97M -printf '%P\n' -o -name *sensetime* -printf '%P\n' -o -name *.lic -printf '%P\n' > .gitignore
     git remote add origin https://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git > /dev/null 2>&1
     echo -e "Dumping extras"
     git add --all > /dev/null 2>&1
+    echo -e "added all"
     git reset system/ vendor/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add extras for ${DESCRIPTION}" > /dev/null 2>&1
     git push hhttps://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git $BRANCH > /dev/null 2>&1
@@ -50,10 +50,12 @@ for var in "$@"; do
     [[ -d vendor/ ]] && git push https://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping apps"
     git add system/system/app/ system/system/priv-app/ > /dev/null 2>&1 || git add system/app/ system/priv-app/ > /dev/null 2>&1
+    echo -e "added apps"
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add apps for ${DESCRIPTION}" > /dev/null 2>&1
     git push https://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping system"
     git add system/ > /dev/null 2>&1
+    echo -e "added system"
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add system for ${DESCRIPTION}" > /dev/null 2>&1
     git push https://gitlab-ci-token:$LAB_TOKEN@gitlab.com/$ORG/dum.git $BRANCH -f
 done
