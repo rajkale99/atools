@@ -16,7 +16,7 @@ source $PROJECT_DIR/helpers/common_script.sh
 [[ -z "$1" ]] && echo -e "Supply dir's as arguements!" && exit 1
 
 # Exit if missing token's
-[[ -z "$GIT_TOKEN" ]] && echo -e "Missing GitHub token. Exiting." && exit 1
+[[ -z "$LAB_TOKEN" ]] && echo -e "Missing GitLab token. Exiting." && exit 1
 
 # o/p
 for var in "$@"; do
@@ -33,26 +33,25 @@ for var in "$@"; do
     repo=dum
     repo_desc=dump
     ORG="rajkale99"
-    curl https://api.github.com/user/repos\?access_token=$GIT_TOKEN -d '{"name": "'"$repo"'","description": "'"$repo_desc"'","private": false,"has_issues": true,"has_projects": false,"has_wiki": true}' > /dev/null 2>&1
-
+    
     git init > /dev/null 2>&1
     git checkout -b $BRANCH > /dev/null 2>&1
-    git remote add origin https://github.com/$ORG/${repo,,}.git > /dev/null 2>&1
+    git remote add origin https://gitlab.com/$ORG/${repo,,}.git > /dev/null 2>&1
     echo -e "Dumping extras"
     git add --all > /dev/null 2>&1
     git reset system/ vendor/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add extras for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$LAB_TOKEN@gitlab.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     [[ -d vendor/ ]] && echo -e "Dumping vendor"
     [[ -d vendor/ ]] && git add vendor/ > /dev/null 2>&1
     [[ -d vendor/ ]] && git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add vendor for ${DESCRIPTION}" > /dev/null 2>&1
-    [[ -d vendor/ ]] && git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    [[ -d vendor/ ]] && git push https://$LAB_TOKEN@gitlab.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping apps"
     git add system/system/app/ system/system/priv-app/ > /dev/null 2>&1 || git add system/app/ system/priv-app/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add apps for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
+    git push https://$LAB_TOKEN@gitlab.com/$ORG/${repo,,}.git $BRANCH > /dev/null 2>&1
     echo -e "Dumping system"
     git add system/ > /dev/null 2>&1
     git -c "user.name=${ORG}" -c "user.email=${GITHUB_EMAIL}" commit -asm "Add system for ${DESCRIPTION}" > /dev/null 2>&1
-    git push https://$GIT_TOKEN@github.com/$ORG/${repo,,}.git $BRANCH -f
+    git push https://$LAB_TOKEN@gitlab.com/$ORG/${repo,,}.git $BRANCH -f
 done
