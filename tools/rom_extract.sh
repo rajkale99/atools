@@ -73,23 +73,34 @@ for var in "$@"; do
     fi
     
     # mounting
-    for file in $PARTITIONS; do
+    for file in odm product system system_ext vendor; do
         if [ -e "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" ]; then
             DIR_NAME=$(echo $file | cut -d . -f1)
             echo -e "Mounting & copying ${DIR_NAME}"
             mkdir -p $PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME $PROJECT_DIR/dumps/$UNZIP_DIR/tempmount
             # mount & permissions
-            sudo -S mount -o loop "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
-            sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
+            sudo -S mount -o loop "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount"
+            sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount"
+            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount"
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount"
             
             # copy to dump
-            sudo cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME > /dev/null 2>&1
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR} > /dev/null 2>&1
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR} > /dev/null 2>&1
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME > /dev/null 2>&1
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME > /dev/null 2>&1
+            sudo cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME
+            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}
+            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME
+            cd $PROJECT_DIR/dumps/ota/odm && ls
+            cd $PROJECT_DIR/dumps/ota/system && ls
+            cd $PROJECT_DIR/dumps/ota/system_ext && ls
+            cd $PROJECT_DIR/dumps/ota/vendor && ls
+            cd $PROJECT_DIR/dumps/ota/product && ls
+            cd $PROJECT_DIR/dumps/ota/
+            zip -R odm1.zip odm/
+            zip -R system1.zip system/
+            zip -R system_ext1.zip system_ext/
+            zip -R vemdor1.zip vendor/
+            zip -R product1.zip product/
 
             # if empty partitions dump, try with 7z
             if [[ -z "$(ls -A $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME)" ]]; then
