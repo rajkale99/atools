@@ -1,0 +1,62 @@
+name: Dump firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      ota:
+        description: 'OTA'
+        required: true
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Setup
+      run: |
+        sudo apt update
+        sudo apt -y install git 
+        sudo apt install python3-protobuf
+        git clone https://github.com/LineageOS/android_prebuilts_extract-tools android/prebuilts/extract-tools
+        git clone https://github.com/LineageOS/android_tools_extract-utils android/tools/extract-utils
+        git clone https://github.com/LineageOS/android_system_update_engine android/system/update_engine
+        
+    - name: Download
+      id: download
+      run: |
+        curl -L ${{ inputs.ota }} -o ota.zip
+        echo ::set-output name=ota_ver::`unzip -p ota.zip META-INF/com/android/metadata | grep ^version_name= | cut -b 14-`
+        unzip ota.zip 
+
+    - name: Dump
+      run: |
+        sudo bash android/prebuilts/extract-tools/linux-x86/bin/ota_extractor --payload payload.bin
+
+    - name: Mount
+      run: |
+          mkdir system/
+          sudo mount -o ro system.img system/
+          sudo mount -o ro vendor.img vendor/
+          sudo mount -o ro odm.img odm/
+          sudo mount -o ro product.img product/
+          sudo mount -o ro system_ext.img system_ext/
+          
+    - name: Zip
+      run: |
+        sudo zip -R system.zip system/
+        sudo zip -R system_ext.zip system_ext/
+        sudo zip -R product.zip product/
+        sudo zip -R vendor.zip vendor/
+        sudo zip -R odm.zip odm/
+      
+    - name: Upload release assets
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: *.zip
+        artifactErrorsFailBuild: true
+        body: ${{ inputs.ota }}
+        tag: ${{ steps.download.outputs.ota_ver }}
+        token: ${{ secrets.GITHUB_TOKEN }}
