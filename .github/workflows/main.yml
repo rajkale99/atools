@@ -20,7 +20,7 @@ jobs:
         sudo apt update
         sudo apt -y install git 
         curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
-        sudo bash setup.sh
+        sudo bash setup.sh > /dev/null
         
     - name: Download
       id: download
@@ -30,11 +30,11 @@ jobs:
 
     - name: Dump
       run: |
-        sudo bash tools/rom_extract.sh ota.zip > /dev/null
+        sudo bash tools/rom_extract.sh ota.zip
 
     - name: Zip
       run: |
-        cd dumps/ota && sudo bash ../../zip.sh > /dev/null
+        cd dumps/ota && sudo bash ../../zip.sh
       
     - name: Upload release assets
       uses: ncipollo/release-action@v1
