@@ -105,9 +105,5 @@ for var in "$@"; do
     fi
     [[ -e $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt ]] && sort -u -o $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt
     find $PROJECT_DIR/dumps/${UNZIP_DIR} -type f -printf '%P\n' | sort | grep -v ".git/" > $PROJECT_DIR/dumps/${UNZIP_DIR}/all_files.txt
- cd $PROJECT_DIR/dumps/${UNZIP_DIR/
- for dir in odm product system system_ext vendor; do
-    sudo zip -r "${dir}.zip" "$dir"
-    done
     duration=$SECONDS
 done
