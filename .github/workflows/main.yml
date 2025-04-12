@@ -31,8 +31,11 @@ jobs:
     - name: Dump
       run: |
         sudo bash tools/rom_extract.sh ota.zip > /dev/null
-        cd dumps/ota && sudo bash ../../zip.sh > /dev/null
 
+    - name: Zip
+      run: |
+        cd dumps/ota && sudo bash ../../zip.sh > /dev/null
+      
     - name: Upload release assets
       uses: ncipollo/release-action@v1
       with:
