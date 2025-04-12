@@ -19,7 +19,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y install git 
-        curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf - atools
+        curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
   
     - name: Download
       id: download
