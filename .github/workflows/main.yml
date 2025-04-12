@@ -37,7 +37,7 @@ jobs:
     - name: Upload release assets
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ota/*.zip
+        artifacts: dumps/ota/*.zip
         artifactErrorsFailBuild: true
         body: ${{ inputs.ota }}
         tag: ${{ steps.download.outputs.ota_ver }}
