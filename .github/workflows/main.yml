@@ -32,12 +32,12 @@ jobs:
       run: |
         sudo bash tools/rom_extract.sh ota.zip > /dev/null
         cd dumps/ota/
-        tar -cf odm vendor system system_ext product
+        for dir in odm vendor system system_ext product; do zip -r "${dir}.zip" "$dir"
 
     - name: Upload release assets
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ota/*.tar
+        artifacts: ota/*.zip
         artifactErrorsFailBuild: true
         body: ${{ inputs.ota }}
         tag: ${{ steps.download.outputs.ota_ver }}
