@@ -82,8 +82,15 @@ for var in "$@"; do
             sudo -S mount -o loop "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
             sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
             sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount" > /dev/null 2>&1
+            
             # copy to dump
             sudo cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME > /dev/null 2>&1
+            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR} > /dev/null 2>&1
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR} > /dev/null 2>&1
+            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME > /dev/null 2>&1
+            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME > /dev/null 2>&1
+
             # if empty partitions dump, try with 7z
             if [[ -z "$(ls -A $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME)" ]]; then
                 7z x $PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img -y -o$PROJECT_DIR/dumps/${UNZIP_DIR}/$file/ 2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log || {
