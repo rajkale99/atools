@@ -79,7 +79,7 @@ for var in "$@"; do
             echo -e "Mounting & copying ${DIR_NAME}"
             mkdir -p $PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME $PROJECT_DIR/dumps/$UNZIP_DIR/tempmount
             # mount & permissions
-            sudo -S mount -o ro "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/$UNZIP_DIR/$file/
+            sudo -S mount -o ro "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/$UNZIP_DIR/$file/"
             sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
             sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
             sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
