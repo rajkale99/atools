@@ -1,0 +1,44 @@
+name: Dump firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      ota:
+        description: 'OTA'
+        required: true
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Setup
+      run: |
+        sudo apt update
+        sudo apt -y install git 
+        curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf - atools
+  
+    - name: Download
+      id: download
+      run: |
+        curl -L ${{ inputs.ota }} -o ota.zip
+        echo ::set-output name=ota_ver::`unzip -p ota.zip META-INF/com/android/metadata | grep ^version_name= | cut -b 14-`
+
+    - name: Dump
+      run: |
+        sudo bash setup.sh
+        sudo bash tools/rom_extract.sh ota.zip > /dev/null
+        cd dumps/ota/
+        tar -cf odm vendor system system_ext product
+
+    - name: Upload release assets
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: ota/*.tar
+        artifactErrorsFailBuild: true
+        body: ${{ inputs.ota }}
+        tag: ${{ steps.download.outputs.ota_ver }}
+        token: ${{ secrets.GITHUB_TOKEN }}
