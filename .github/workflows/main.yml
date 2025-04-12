@@ -20,7 +20,8 @@ jobs:
         sudo apt update
         sudo apt -y install git 
         curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
-  
+        sudo bash setup.sh
+        
     - name: Download
       id: download
       run: |
@@ -29,7 +30,6 @@ jobs:
 
     - name: Dump
       run: |
-        sudo bash setup.sh
         sudo bash tools/rom_extract.sh ota.zip > /dev/null
         cd dumps/ota/
         tar -cf odm vendor system system_ext product
