@@ -32,7 +32,8 @@ jobs:
       run: |
         sudo bash tools/rom_extract.sh ota.zip > /dev/null
         cd dumps/ota/
-        for dir in odm vendor system system_ext product; do zip -r "${dir}.zip" "$dir"
+        for dir in odm vendor system system_ext product; do zip -r "${dir}.zip" "$dir" done
+        done
 
     - name: Upload release assets
       uses: ncipollo/release-action@v1
