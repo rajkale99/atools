@@ -8,45 +8,38 @@ on:
         required: true
 
 jobs:
-  dump:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Setup
-      run: |
+   dump:
+     runs-on: ubuntu-latest
+ 
+     steps:
+     - name: Checkout repo
+       uses: actions/checkout@v4
+       
+     - name: Setup
+       run: |
         sudo apt update
         pwd
         ls
         sudo apt -y install git libguestfs-tools gcc libfuse-dev erofs-utils aria2 arj brotli cabextract cmake device-tree-compiler gcc g++ git liblz4-tool liblzma-dev libtinyxml2-dev lz4 mpack openjdk-11-jdk p7zip-full p7zip-rar python3 python3-pip rar sharutils unace unrar unzip uudeview xz-utils zip zlib1g-dev python3-protobuf build-essential libssl-dev libffi-dev python3-dev > /dev/null
-
-  download:
-   runs-on: ubuntu-latest
-   needs: dump
-   steps:
-   - name: Checkout repo
-     uses: actions/checkout@v4
+        sudo bash setup.sh
      
-   - name: Download
-     id: download
-     run: |
+     - name: Download
+       id: download
+       run: |
         curl -L ${{ inputs.ota }} -o ota.zip
         echo ::set-output name=ota_ver::`unzip -p ota.zip META-INF/com/android/metadata | grep ^version_name= | cut -b 14-`
         pwd
         ls
 
-   - name: Extract
-     id: extract
-     run: |
+     - name: Extract
+       id: extract
+       run: |
         pwd
         ls
         sudo bash tools/rom_extract.sh ota.zip
-        
-  Mount:
-   runs-on: ubuntu-latest
-   needs: [dump, download]
-   steps:        
-   - name: dump erofs
-     run: |
+
+     - name: dump erofs
+       run: |
          cd dumps/ota 
          sudo mkdir system system_ext product odm vendor
          sudo mkdir system system_ext product odm vendor
@@ -61,13 +54,13 @@ jobs:
          fsck.erofs --extract=product product.img
          ls product
          
-   - name: Zip
-     run: |
+     - name: Zip
+       run: |
         cd dumps/ota && sudo bash ../../zip.sh
       
-   - name: Upload release assets
-     uses: ncipollo/release-action@v1
-     with:
+     - name: Upload release assets
+       uses: ncipollo/release-action@v1
+       with:
         artifacts: dumps/ota/*.zip
         artifactErrorsFailBuild: true
         body: ${{ inputs.ota }}
