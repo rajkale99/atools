@@ -72,46 +72,6 @@ for var in "$@"; do
         done
     fi
     
-    # mounting
-    for file in odm product system system_ext vendor; do
-        if [ -e "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" ]; then
-            DIR_NAME=$(echo $file | cut -d . -f1)
-            echo -e "Mounting & copying ${DIR_NAME}"
-            mkdir -p $PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME $PROJECT_DIR/dumps/$UNZIP_DIR/tempmount
-            # mount & permissions
-            sudo -S mount -o ro "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img" "$PROJECT_DIR/dumps/$UNZIP_DIR/$file/"
-            sudo -S chown -R $USER:$USER "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$file"
-            
-            # copy to dump
-            sudo cp -a $PROJECT_DIR/dumps/${UNZIP_DIR}/tempmount/* $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}
-            sudo -S chmod -R u+rwX "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME
-            sudo -S chmod -R 777 "$PROJECT_DIR/dumps/${UNZIP_DIR}/$DIR_NAME
-            cd $PROJECT_DIR/dumps/ota/odm && ls
-            cd $PROJECT_DIR/dumps/ota/system && ls
-            cd $PROJECT_DIR/dumps/ota/system_ext && ls
-            cd $PROJECT_DIR/dumps/ota/vendor && ls
-            cd $PROJECT_DIR/dumps/ota/product && ls
-            cd $PROJECT_DIR/dumps/ota/
-            zip -R odm1.zip odm/
-            zip -R system1.zip system/
-            zip -R system_ext1.zip system_ext/
-            zip -R vemdor1.zip vendor/
-            zip -R product1.zip product/
-
-            # if empty partitions dump, try with 7z
-            if [[ -z "$(ls -A $PROJECT_DIR/dumps/$UNZIP_DIR/$DIR_NAME)" ]]; then
-                7z x $PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img -y -o$PROJECT_DIR/dumps/${UNZIP_DIR}/$file/ 2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log || {
-                    rm -rf $PROJECT_DIR/dumps/${UNZIP_DIR}/$file/* 2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log
-                    $PROJECT_DIR/tools/Firmware_extractor/tools/Linux/bin/fsck.erofs --extract=$PROJECT_DIR/dumps/${UNZIP_DIR}/$file $PROJECT_DIR/dumps/${UNZIP_DIR}/$file.img 2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log2>/dev/null >> $PROJECT_DIR/dumps/${UNZIP_DIR}/zip.log
-                }
-            fi
-        fi
-    done
-
     # board-info.txt & all_files.txt
     if [ -d $PROJECT_DIR/dumps/${UNZIP_DIR}/modem ]; then
         find $PROJECT_DIR/dumps/${UNZIP_DIR}/modem -type f -exec strings {} \; | grep "QC_IMAGE_VERSION_STRING=MPSS." | sed "s|QC_IMAGE_VERSION_STRING=MPSS.||g" | cut -c 4- | sed -e 's/^/require version-baseband=/' >> $PROJECT_DIR/dumps/${UNZIP_DIR}/board-info.txt
