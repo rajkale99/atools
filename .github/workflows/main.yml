@@ -18,11 +18,10 @@ jobs:
     - name: Setup
       run: |
         sudo apt update
-        sudo apt -y install git libguestfs-tools gcc libfuse-dev make
+        sudo apt -y install git libguestfs-tools gcc libfuse-dev erofs-utils
         curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
         sudo bash setup.sh > /dev/null
-        git clone https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git && cd erofs-utils && make && make install
-    
+        
     - name: Download
       id: download
       run: |
