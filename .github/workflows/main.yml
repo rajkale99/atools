@@ -23,6 +23,9 @@ jobs:
    runs-on: ubuntu-latest
    needs: dump
    steps:
+   - name: Checkout repo
+     uses: actions/checkout@v4
+     
    - name: Download
      id: download
      run: |
@@ -31,26 +34,20 @@ jobs:
         pwd
         ls
 
-  Extract:
-   runs-on: ubuntu-latest
-   needs: [dump, download]
-   steps:
-   - name: Checkout repo
-     uses: actions/checkout@v4
-
    - name: Extract
+     id: extract
      run: |
         pwd
         ls
-        sudo bash tools/rom_extract.sh ../../ota.zip
+        sudo bash tools/rom_extract.sh ota.zip
         
   Mount:
    runs-on: ubuntu-latest
-   needs: [dump, download, Extract]
+   needs: [dump, download]
    steps:        
    - name: dump erofs
      run: |
-         cd atools/dumps/ota 
+         cd dumps/ota 
          sudo mkdir system system_ext product odm vendor
          sudo mkdir system system_ext product odm vendor
          fsck.erofs --extract=system system.img
@@ -66,7 +63,7 @@ jobs:
          
    - name: Zip
      run: |
-        cd atools/dumps/ota && sudo bash ../../zip.sh
+        cd dumps/ota && sudo bash ../../zip.sh
       
    - name: Upload release assets
      uses: ncipollo/release-action@v1
