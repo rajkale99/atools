@@ -41,8 +41,6 @@ jobs:
      - name: dump erofs
        run: |
          cd dumps/ota 
-         sudo mkdir system system_ext product odm vendor
-         sudo mkdir system system_ext product odm vendor
          fsck.erofs --extract=system system.img
          ls system
          fsck.erofs --extract=system_ext system_ext.img
