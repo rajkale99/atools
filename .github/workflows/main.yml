@@ -13,12 +13,12 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup
       run: |
         sudo apt update
-        sudo apt -y install git 
+        sudo apt -y install git libguestfs-tools
         curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
         sudo bash setup.sh > /dev/null
         
@@ -31,7 +31,21 @@ jobs:
     - name: Dump
       run: |
         sudo bash tools/rom_extract.sh ota.zip
-
+    - name: Mount 
+      run: |
+         cd dumps/ota 
+         mkdir system system_ext product odm vendor
+         guestmount -a system.img -i system 
+         ls system
+         guestmount -a system_ext.img -i system_ext 
+         ls system_ext
+         guestmount -a odm.img -i odm
+         ls odm
+         guestmount -a vendor.img -i vendor
+         ls vendor
+         guestmount -a odm.img -i odm 
+         ls odm
+         
     - name: Zip
       run: |
         cd dumps/ota && sudo bash ../../zip.sh
