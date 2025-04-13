@@ -18,10 +18,11 @@ jobs:
     - name: Setup
       run: |
         sudo apt update
-        sudo apt -y install git libguestfs-tools
+        sudo apt -y install git libguestfs-tools gcc libfuse-dev make
         curl -L https://github.com/rajkale99/atools/archive/refs/tags/initial.tar.gz -o - |tar xzf -
         sudo bash setup.sh > /dev/null
-        
+        git clone https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git && cd erofs-utils && make && make install
+    
     - name: Download
       id: download
       run: |
@@ -32,19 +33,20 @@ jobs:
       run: |
         sudo bash tools/rom_extract.sh ota.zip
         
-    - name: Mount 
+        
+    - name: dump erofs
       run: |
          cd dumps/ota 
          sudo mkdir system system_ext product odm vendor
-         guestmount -a system.img -i system 
+         dump.erofs -a system.img ./system/
          ls system
-         guestmount -a system_ext.img -i system_ext 
+         dump.erofs -a system_ext.img ./system_ext/
          ls system_ext
-         guestmount -a odm.img -i odm
+         dump.erofs -a odm.img ./odm/
          ls odm
-         guestmount -a vendor.img -i vendor
+         dump.erofs -a vendor.img ./vendor/
          ls vendor
-         guestmount -a odm.img -i odm 
+         dump.erofs -a odm.img ./odm/
          ls odm
          
     - name: Zip
