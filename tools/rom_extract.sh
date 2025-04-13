@@ -85,3 +85,16 @@ for var in "$@"; do
     find $PROJECT_DIR/dumps/${UNZIP_DIR} -type f -printf '%P\n' | sort | grep -v ".git/" > $PROJECT_DIR/dumps/${UNZIP_DIR}/all_files.txt
     duration=$SECONDS
 done
+cd dumps/ota 
+ls
+sudo mkdir system system_ext product odm vendor
+dump.erofs system.img system/
+ls system
+dump.erofs system_ext.img system_ext/
+ls system_ext
+dump.erofs odm.img odm/
+ls odm
+dump.erofs vendor.img vendor/
+ls vendor
+dump.erofs product.img product/
+ls product
