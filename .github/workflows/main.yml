@@ -35,7 +35,7 @@ jobs:
     - name: Mount 
       run: |
          cd dumps/ota 
-         mkdir system system_ext product odm vendor
+         sudo mkdir system system_ext product odm vendor
          guestmount -a system.img -i system 
          ls system
          guestmount -a system_ext.img -i system_ext 
