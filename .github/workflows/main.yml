@@ -34,17 +34,18 @@ jobs:
      - name: dump erofs
        run: |
          cd dumps/ota 
+         ls
          sudo mkdir system system_ext product odm vendor
-         dump.erofs system.img ./system/
+         dump.erofs system.img system/
          ls system
-         dump.erofs system_ext.img ./system_ext/
+         dump.erofs system_ext.img system_ext/
          ls system_ext
-         dump.erofs odm.img ./odm/
+         dump.erofs odm.img odm/
          ls odm
-         dump.erofs vendor.img ./vendor/
+         dump.erofs vendor.img vendor/
          ls vendor
-         dump.erofs odm.img ./odm/
-         ls odm
+         dump.erofs product.img product/
+         ls product
          
      - name: Zip
        run: |
